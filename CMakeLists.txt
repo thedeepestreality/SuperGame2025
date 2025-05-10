@@ -4,6 +4,7 @@ project(SuperGame2025)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+
 # set(SFML_STATIC_LIBRARIES TRUE)
 
 set(SFML_DIR "C:\\Users\\st021513\\Downloads\\sfml\\lib\\cmake\\SFML")
