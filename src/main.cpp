@@ -106,6 +106,7 @@ int main() {
 	RenderParams render_params;
 	render_params.cell_side = cell_side;
 
+	GameStatus status = GameStatus::StartMenu;
 	sf::Event event;
     while (window.isOpen())
     {
@@ -117,45 +118,55 @@ int main() {
 		
         window.clear();
 
-		auto state = manager.get_state();
-		render_world(state, window, render_params);
+		if (status == GameStatus::StartMenu) {
+			const int button_width = 200;
+			const int button_height = 100;
+			sf::RectangleShape button({ button_width, button_height });
+			button.setPosition((win_width - button_width) / 2.0f, (win_height - button_height) / 2.0f);
+			window.draw(button);
+			window.display();
+		}
+		else {
+			auto state = manager.get_state();
+			render_world(state, window, render_params);
 
-        window.display();
+			window.display();
 
-		Direction dir = Direction::None;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
-			dir = Direction::Left;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-			dir = Direction::Right;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
-			dir = Direction::Down;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
-			dir = Direction::Up;
+			Direction dir = Direction::None;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+				dir = Direction::Left;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+				dir = Direction::Right;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+				dir = Direction::Down;
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+				dir = Direction::Up;
 
-		// If collided to enemy, show modal window and die
-		if (manager.update_world(dir)) {
+			// If collided to enemy, show modal window and die
+			if (manager.update_world(dir)) {
 
-			sf::RenderWindow popUpWindow(sf::VideoMode(320, 240), "GAME OVER", sf::Style::Close);
-			popUpWindow.setPosition(window.getPosition() + sf::Vector2i(100, 100));
-			sf::Event event;
-			while (popUpWindow.isOpen())
-			{
-				popUpWindow.clear(sf::Color::Cyan);
-				popUpWindow.display();
-
-				while (popUpWindow.pollEvent(event))
+				sf::RenderWindow popUpWindow(sf::VideoMode(320, 240), "GAME OVER", sf::Style::Close);
+				popUpWindow.setPosition(window.getPosition() + sf::Vector2i(100, 100));
+				sf::Event event;
+				while (popUpWindow.isOpen())
 				{
-					if (event.type == sf::Event::Closed)
-						popUpWindow.close();
-					if (event.type == sf::Event::LostFocus)
+					popUpWindow.clear(sf::Color::Cyan);
+					popUpWindow.display();
+
+					while (popUpWindow.pollEvent(event))
 					{
-						if (window.hasFocus())
-							popUpWindow.requestFocus();
+						if (event.type == sf::Event::Closed)
+							popUpWindow.close();
+						if (event.type == sf::Event::LostFocus)
+						{
+							if (window.hasFocus())
+								popUpWindow.requestFocus();
+						}
 					}
+					sf::sleep(sf::milliseconds(1));
 				}
-				sf::sleep(sf::milliseconds(1));
+				window.close();
 			}
-			window.close();
 		}
     }
 

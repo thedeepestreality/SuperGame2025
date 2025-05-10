@@ -10,6 +10,11 @@ enum class Direction {
 	Right
 };
 
+enum class GameStatus {
+	StartMenu,
+	InGame
+};
+
 class GameManager {
 private:
 	GameState m_state;
