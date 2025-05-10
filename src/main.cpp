@@ -106,6 +106,10 @@ int main() {
 	RenderParams render_params;
 	render_params.cell_side = cell_side;
 
+	sf::Font font;
+	if (!font.loadFromFile("C:\\Windows\\Fonts\\Arial.TTF"))
+		return EXIT_FAILURE;
+
 	GameStatus status = GameStatus::StartMenu;
 	sf::Event event;
     while (window.isOpen())
@@ -119,11 +123,39 @@ int main() {
         window.clear();
 
 		if (status == GameStatus::StartMenu) {
+
+			// create button
 			const int button_width = 200;
 			const int button_height = 100;
 			sf::RectangleShape button({ button_width, button_height });
-			button.setPosition((win_width - button_width) / 2.0f, (win_height - button_height) / 2.0f);
+			float button_left = (win_width - button_width) / 2.0f;
+			float button_top = (win_height - button_height) / 2.0f;
+			float button_right = button_left + button_width;
+			float button_bottom = button_top + button_height;
+			button.setPosition(button_left, button_top);
+			button.setFillColor(sf::Color(100, 150, 100));
+			button.setOutlineColor(sf::Color(100, 100, 200));
+			button.setOutlineThickness(3.0f);
+
+			// check if mouse is above the button
+			sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
+			if (mouse_pos.x >= button_left &&
+				mouse_pos.x <= button_right &&
+				mouse_pos.y >= button_top &&
+				mouse_pos.y <= button_bottom) {
+				button.setOutlineColor(sf::Color(200, 100, 100));
+
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+					status = GameStatus::InGame;
+			}
+
+			// create text
+			sf::Text text("Hello", font, 24); // a font is required to make a text object!
+			text.setFillColor(sf::Color::Black);
+			text.setPosition((win_width - button_width) / 2.0f, (win_height - button_height) / 2.0f);
+			
 			window.draw(button);
+			window.draw(text);
 			window.display();
 		}
 		else {
