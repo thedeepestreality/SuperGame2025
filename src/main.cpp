@@ -125,8 +125,8 @@ int main() {
 		if (status == GameStatus::StartMenu) {
 
 			// create button
-			const int button_width = 200;
-			const int button_height = 100;
+			const float button_width = 200.0f;
+			const float button_height = 100.0f;
 			sf::RectangleShape button({ button_width, button_height });
 			float button_left = (win_width - button_width) / 2.0f;
 			float button_top = (win_height - button_height) / 2.0f;
