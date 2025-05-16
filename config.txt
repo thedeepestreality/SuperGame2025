@@ -1,0 +1,11 @@
+color:
+  player: blue
+  wall: gray
+  empty: green
+  enemy: red
+world:
+  P........
+  ..X....X.
+  .....H...
+  ..HH.HHHH
+  ..HH.....
