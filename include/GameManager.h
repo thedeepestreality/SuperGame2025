@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GameState.h>
-
+ 
 enum class Direction {
 	None,
 	Up,
