@@ -2,7 +2,6 @@
 #include <vector>
 #include <chrono>
 #include <thread>
-#include <fstream>
 
 #include <SFML/Graphics.hpp>
 
@@ -34,13 +33,6 @@ void render_world(const GameState& state) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
-struct RenderParams {
-	float cell_side = 100.0f;
-	sf::Color empty_color = sf::Color(100, 250, 50);
-	sf::Color wall_color = sf::Color(100, 100, 100);
-	sf::Color player_color = sf::Color(100, 100, 250);
-	sf::Color enemy_color = sf::Color(255, 100, 100);
-};
 
 void render_world(const GameState& state, sf::RenderWindow& window, const Config& config) {
 	const float cell_side = config.cell_side;
@@ -81,7 +73,11 @@ int main() {
 
 	GameState init_state;
 	Config config;
-	InitGame(init_state, config);
+	int result = InitGame(init_state, config, "config.txt");
+	if (result != 0) {
+		std::cerr << "Failed to initialize game" << std::endl;
+		return 1;
+	}
 
 
 	GameManager manager(init_state);
